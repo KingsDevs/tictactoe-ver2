@@ -147,7 +147,9 @@ int main()
     size_t size = 3;
     char ** board = create_board(size);
     int ai_move[2];
-    char winner;
+    char players[2] = {PLAYER1, PLAYER2};
+    char winner, current_player = players[0];
+    
     print_board(board, size);
 
 
