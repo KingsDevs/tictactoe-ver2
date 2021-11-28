@@ -126,17 +126,52 @@ bool check_won(char ** board, char player, size_t size)
     
     return false;
 }
+
+bool is_board_full(char ** board, size_t size)
+{
+    for (size_t i = 0; i < size; i++)
+    {
+       for (size_t j = 0; j < size; j++)
+       {
+           if(board[i][j] == ' ')
+                return false;
+       }
+       
+    }
+    
+    return true;
+}
+
 int main()
 {
     size_t size = 3;
     char ** board = create_board(size);
+    int ai_move[2];
+    char winner;
     print_board(board, size);
 
-    update_board(board, size, PLAYER1, NULL);
-    update_board(board, size, PLAYER1, NULL);
-    update_board(board, size, PLAYER1, NULL);
 
-    printf("%d", check_won(board, PLAYER1, size));
+    while (1)
+    {
+        update_board(board, size, PLAYER1, NULL);
+    }
+    
+
+    // update_board(board, size, PLAYER1, NULL);
+    // update_board(board, size, PLAYER1, NULL);
+    // update_board(board, size, PLAYER1, NULL);
+
+    // update_board(board, size, PLAYER1, NULL);
+    // update_board(board, size, PLAYER1, NULL);
+    // update_board(board, size, PLAYER1, NULL);
+
+    // update_board(board, size, PLAYER1, NULL);
+    // update_board(board, size, PLAYER1, NULL);
+    // update_board(board, size, PLAYER1, NULL);
+
+
+    // printf("%d", check_won(board, PLAYER1, size));
+    // printf("%d", is_board_full(board, size));
     // for (size_t i = 0; i < size; i++)
     // {
     //     printf("%c ", board[i][i]);
