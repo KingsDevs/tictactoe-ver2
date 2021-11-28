@@ -142,20 +142,41 @@ bool is_board_full(char ** board, size_t size)
     return true;
 }
 
+void switch_player(char * players)
+{
+    char temp = players[0];
+    players[0] = players[1];
+    players[1] = temp;
+}
+
 int main()
 {
     size_t size = 3;
     char ** board = create_board(size);
     int ai_move[2];
     char players[2] = {PLAYER1, PLAYER2};
-    char winner, current_player = players[0];
+    char winner;
     
     print_board(board, size);
 
 
     while (1)
     {
-        update_board(board, size, PLAYER1, NULL);
+        char current_player = players[0];
+        update_board(board, size, current_player, NULL);
+
+        if (check_won(board, current_player, size))
+        {
+            printf("Player %c won!", current_player);
+            break;
+        }
+        switch_player(players);
+
+        if (is_board_full(board, size))
+        {
+            printf("Board is full\n");
+            break;
+        }
     }
     
 
