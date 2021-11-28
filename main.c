@@ -102,7 +102,7 @@ bool check_won(char ** board, char player, size_t size)
     
     //front slash
     
-    
+    score = 0;
     for (size_t i = 0; i < size; i++)
     {
         if (board[i][i] == player)
@@ -112,7 +112,17 @@ bool check_won(char ** board, char player, size_t size)
     if (score == size)
         return true;
 
+    score = 0;
+    int curr_ind = size - 1;
+    for (size_t i = 0; i < size; i++)
+    {
+        if (board[curr_ind][i] == player)
+            score++;
 
+        curr_ind--;        
+    }
+    if (score == size)
+        return true;
     
     return false;
 }
@@ -127,6 +137,11 @@ int main()
     update_board(board, size, PLAYER1, NULL);
 
     printf("%d", check_won(board, PLAYER1, size));
+    // for (size_t i = 0; i < size; i++)
+    // {
+    //     printf("%c ", board[i][i]);
+    // }
+    
     
 
     return 0;
