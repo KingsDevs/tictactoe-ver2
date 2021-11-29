@@ -186,12 +186,31 @@ void play_with_friend(char ** board, size_t size, char * players)
     }
 }
 
+void minimax(char ** board, size_t size, char * players, int * ai_moves)
+{
+    for (size_t i = 0; i < size; i++)
+    {
+        for (size_t j = 0; j < size; j++)
+        {
+            if(board[i][j] == ' ')
+            {
+                ai_moves[0] = i;
+                ai_moves[1] = j;
+                break;
+            }
+        }
+        
+    }
+    
+}
+
 void play_with_computer(char ** board, size_t size, char * players, int * ai_moves)
 {
+    bool has_picked = false;
     while (1)
     {
         char human;
-        while (1)
+        while (!has_picked)
         {
             printf("Choose your player!\n");
             printf("1 - %c\n", PLAYER1);
@@ -203,18 +222,42 @@ void play_with_computer(char ** board, size_t size, char * players, int * ai_mov
             if (choice == 1)
             {
                 human = PLAYER1;
+                has_picked = true;
                 break;
             }
             else if (choice == 2)
             {
                 human = PLAYER2;
+                has_picked = true;
                 break;
             }
             else
                 printf("Invalid choice\n");
-
         }
+
+        char current_player = players[0];
+        printf("Player %c turn!\n", current_player);
         
+        if (current_player == human)
+            update_board(board, size, current_player, NULL);
+        else
+        {
+            minimax(board, size, players, ai_moves);
+            update_board(board, size, current_player, ai_moves);
+        }
+
+        if (check_won(board, current_player, size))
+        {
+            printf("Player %c won!\n", current_player);
+            break;
+        }
+        switch_player(players);
+
+        if (is_board_full(board, size))
+        {
+            printf("Board is full\n");
+            break;
+        }
     }
     
 }
@@ -248,7 +291,7 @@ int main()
         
         case 2:
             print_board(board, size);
-            printf("Wala pa nahuman\n");
+            play_with_computer(board, size, players, ai_move);
             break;
     
         case 3:
