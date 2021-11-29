@@ -186,6 +186,39 @@ void play_with_friend(char ** board, size_t size, char * players)
     }
 }
 
+void play_with_computer(char ** board, size_t size, char * players, int * ai_moves)
+{
+    while (1)
+    {
+        char human;
+        while (1)
+        {
+            printf("Choose your player!\n");
+            printf("1 - %c\n", PLAYER1);
+            printf("2 - %c\n", PLAYER2);
+
+            int choice;
+            scanf(" %d", &choice);
+
+            if (choice == 1)
+            {
+                human = PLAYER1;
+                break;
+            }
+            else if (choice == 2)
+            {
+                human = PLAYER2;
+                break;
+            }
+            else
+                printf("Invalid choice\n");
+
+        }
+        
+    }
+    
+}
+
 int main()
 {
     size_t size = 3;
@@ -214,6 +247,7 @@ int main()
             break;
         
         case 2:
+            print_board(board, size);
             printf("Wala pa nahuman\n");
             break;
     
