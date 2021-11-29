@@ -2,10 +2,12 @@
 #include<stdlib.h>
 #include<string.h>
 #include<stdbool.h>
-#include<math.h>
 
 #define PLAYER1 'X'
 #define PLAYER2 'O'
+
+#define INFINITY __INT_MAX__
+#define MAX_DEPTH 10
 
 
 char ** create_board(size_t size)
@@ -188,21 +190,104 @@ void play_with_friend(char ** board, size_t size, char * players)
     }
 }
 
-void minimax(char ** board, size_t size, bool maximizer, int depth, char * players, int * ai_moves)
+char ** copyboard(char ** board, size_t size)
 {
+    char ** newboard = (char **)malloc(sizeof(char *) * size);
     for (size_t i = 0; i < size; i++)
     {
+        newboard[i] = (char *)malloc(sizeof(char) * size);
         for (size_t j = 0; j < size; j++)
+            newboard[i][j] = board[i][j];
+        
+    }
+
+    return newboard;
+    
+}
+
+int check_winner(char ** board, size_t size, char computer, char human)
+{
+    bool curr_player = check_won(board, computer, size);
+    bool opponent = check_won(board, human, size);
+
+    if (curr_player)
+        return 1;
+
+    if(opponent)
+        return -1;
+
+    return 0;    
+}
+
+int max(int a, int b)
+{
+    if(a > b)
+        return a;
+    return b;
+}
+
+int min(int a, int b)
+{
+    if(a < b)
+        return a;
+    return b;
+}
+
+int minimax(char ** board, size_t size, bool maximizer, int depth, int alpha, int beta, char computer, char human)
+{
+    int result = check_winner(board, size, computer, human);
+    if(depth <= 0)
+        return result;
+
+    if (maximizer)
+    {
+        int max_eval = -INFINITY;
+        for (size_t i = 0; i < size; i++)
         {
-            if(board[i][j] == ' ')
+            for (size_t j = 0; j < size; j++)
             {
-                ai_moves[0] = i;
-                ai_moves[1] = j;
-                break;
+                if (board[i][j] == ' ')
+                {
+                    board[i][j] = computer;
+                    int eval = minimax(board, size, false, depth - 1, alpha, beta, computer, human);
+                    board[i][j] = ' ';
+                    max_eval = max(max_eval, eval);
+
+                    alpha = max(alpha, eval);
+                    if(beta <= alpha)
+                        return max_eval;
+                }
+                
             }
         }
         
+        return max_eval;
     }
+    else if (!maximizer)
+    {
+        int min_eval = INFINITY;
+        for (size_t i = 0; i < size; i++)
+        {
+            for (size_t j = 0; j < size; j++)
+            {
+                if (board[i][j] == ' ')
+                {
+                    board[i][j] = computer;
+                    int eval = minimax(board, size, true, depth - 1, alpha, beta, computer, human);
+                    board[i][j] = ' ';
+                    min_eval = min(min_eval, eval);
+
+                    beta = min(beta, eval);
+                    if(beta <= alpha)
+                        return min_eval;
+                }
+                
+            }
+        }
+        
+        return min_eval;
+    }
+    
     
 }
 
@@ -247,8 +332,29 @@ void play_with_computer(char ** board, size_t size, char * players, int * ai_mov
             update_board(board, size, current_player, NULL);
         else
         {
-            // int temp_players[2] = {players[0], players[1]};
-            // minimax(board, size, temp_players, ai_moves);
+            int best_score = -INFINITY;
+            for (size_t i = 0; i < size; i++)
+            {
+                for (size_t j = 0; j < size; j++)
+                {
+                    if (board[i][j] == ' ')
+                    {
+                        board[i][j] = current_player;
+                        int score = minimax(board, size, true, MAX_DEPTH, -INFINITY, INFINITY, current_player, human);
+                        board[i][j] = ' ';
+
+                        if (best_score < score)
+                        {
+                            best_score = score;
+                            ai_moves[0] = i;
+                            ai_moves[1] = j;
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
             update_board(board, size, current_player, ai_moves);
         }
 
