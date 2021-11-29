@@ -55,9 +55,19 @@ void update_board(char ** board, size_t size, char player, int * ai_move)
     if(ai_move == NULL)
     {
         unsigned int row, col;
-        printf("Input <row, column> :\n>> ");
-        scanf("%d%d", &row, &col);
-        board[row-1][col-1] = player;
+        while (1)
+        {
+            printf("Input <row, column> :\n>> ");
+            scanf("%d%d", &row, &col);
+            if ((row < size || col < size) && (col >= 0 || row >= 0))
+            {
+                board[row-1][col-1] = player;
+                break;
+            }
+            else
+                printf("Invalid Move! Please try again!\n");
+        }
+
     }
     else
     {
@@ -163,11 +173,12 @@ int main()
     while (1)
     {
         char current_player = players[0];
+        printf("Player %c turn!\n", current_player);
         update_board(board, size, current_player, NULL);
 
         if (check_won(board, current_player, size))
         {
-            printf("Player %c won!", current_player);
+            printf("Player %c won!\n", current_player);
             break;
         }
         switch_player(players);
