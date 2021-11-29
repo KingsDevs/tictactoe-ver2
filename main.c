@@ -2,9 +2,11 @@
 #include<stdlib.h>
 #include<string.h>
 #include<stdbool.h>
+#include<math.h>
 
 #define PLAYER1 'X'
 #define PLAYER2 'O'
+
 
 char ** create_board(size_t size)
 {
@@ -186,7 +188,7 @@ void play_with_friend(char ** board, size_t size, char * players)
     }
 }
 
-void minimax(char ** board, size_t size, char * players, int * ai_moves)
+void minimax(char ** board, size_t size, bool maximizer, int depth, char * players, int * ai_moves)
 {
     for (size_t i = 0; i < size; i++)
     {
@@ -245,7 +247,8 @@ void play_with_computer(char ** board, size_t size, char * players, int * ai_mov
             update_board(board, size, current_player, NULL);
         else
         {
-            minimax(board, size, players, ai_moves);
+            // int temp_players[2] = {players[0], players[1]};
+            // minimax(board, size, temp_players, ai_moves);
             update_board(board, size, current_player, ai_moves);
         }
 
