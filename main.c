@@ -59,10 +59,14 @@ void update_board(char ** board, size_t size, char player, int * ai_move)
         {
             printf("Input <row, column> :\n>> ");
             scanf("%d%d", &row, &col);
-            if ((row < size || col < size) && (col >= 0 || row >= 0))
+            if ((row <= size || col <= size) && (col >= 0 || row >= 0))
             {
-                board[row-1][col-1] = player;
-                break;
+                if (board[row-1][col-1] == ' ')
+                {
+                    board[row-1][col-1] = player;
+                    break;
+                }
+                printf("Cell not Empty!\n");
             }
             else
                 printf("Invalid Move! Please try again!\n");
