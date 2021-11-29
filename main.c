@@ -7,7 +7,7 @@
 #define PLAYER2 'O'
 
 #define INFINITY __INT_MAX__
-#define MAX_DEPTH 10
+#define MAX_DEPTH 8
 
 
 char ** create_board(size_t size)
@@ -190,19 +190,14 @@ void play_with_friend(char ** board, size_t size, char * players)
     }
 }
 
-char ** copyboard(char ** board, size_t size)
+void empty_board(char ** board, size_t size)
 {
-    char ** newboard = (char **)malloc(sizeof(char *) * size);
     for (size_t i = 0; i < size; i++)
     {
-        newboard[i] = (char *)malloc(sizeof(char) * size);
         for (size_t j = 0; j < size; j++)
-            newboard[i][j] = board[i][j];
+            board[i][j] = ' ';
         
     }
-
-    return newboard;
-    
 }
 
 int check_winner(char ** board, size_t size, char computer, char human)
@@ -340,7 +335,7 @@ void play_with_computer(char ** board, size_t size, char * players, int * ai_mov
                     if (board[i][j] == ' ')
                     {
                         board[i][j] = current_player;
-                        int score = minimax(board, size, true, MAX_DEPTH, -INFINITY, INFINITY, current_player, human);
+                        int score = minimax(board, size, false, MAX_DEPTH, -INFINITY, INFINITY, current_player, human);
                         board[i][j] = ' ';
 
                         if (best_score < score)
@@ -399,10 +394,12 @@ int main()
         case 1:
             print_board(board, size);
             play_with_friend(board, size, players);
+            empty_board(board, size);
             break;
         
         case 2:
             play_with_computer(board, size, players, ai_move);
+            empty_board(board, size);
             break;
     
         case 3:
