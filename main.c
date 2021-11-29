@@ -217,18 +217,21 @@ void play_with_computer(char ** board, size_t size, char * players, int * ai_mov
             printf("2 - %c\n", PLAYER2);
 
             int choice;
+            printf(">> ");
             scanf(" %d", &choice);
 
             if (choice == 1)
             {
                 human = PLAYER1;
                 has_picked = true;
+                print_board(board, size);
                 break;
             }
             else if (choice == 2)
             {
                 human = PLAYER2;
                 has_picked = true;
+                print_board(board, size);
                 break;
             }
             else
@@ -290,7 +293,6 @@ int main()
             break;
         
         case 2:
-            print_board(board, size);
             play_with_computer(board, size, players, ai_move);
             break;
     
