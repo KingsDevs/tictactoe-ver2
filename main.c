@@ -163,17 +163,8 @@ void switch_player(char * players)
     players[1] = temp;
 }
 
-int main()
+void play_with_friend(char ** board, size_t size, char * players)
 {
-    size_t size = 3;
-    char ** board = create_board(size);
-    int ai_move[2];
-    char players[2] = {PLAYER1, PLAYER2};
-    char winner;
-    
-    print_board(board, size);
-
-
     while (1)
     {
         char current_player = players[0];
@@ -193,6 +184,54 @@ int main()
             break;
         }
     }
+}
+
+int main()
+{
+    size_t size = 3;
+    char ** board = create_board(size);
+    int ai_move[2];
+    char players[2] = {PLAYER1, PLAYER2};
+    char winner;
+    
+    //print_board(board, size);
+
+    int choice;
+    while (1)
+    {
+        printf("TIC-TAC-TOE\n");
+        printf("1. Play with friend\n");
+        printf("2. Play with computer\n");
+        printf("3. Exit\n");
+        printf(">> ");
+        scanf(" %d", &choice);
+
+        switch (choice)
+        {
+        case 1:
+            print_board(board, size);
+            play_with_friend(board, size, players);
+            break;
+        
+        case 2:
+            printf("Wala pa nahuman\n");
+            break;
+    
+        case 3:
+            break;
+
+        default:
+            printf("Invalid Choice!\n");
+            break;
+        }
+
+        if (choice == 3)
+            break;
+        
+    }
+    
+
+    
     
 
     // update_board(board, size, PLAYER1, NULL);
