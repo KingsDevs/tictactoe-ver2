@@ -1,6 +1,11 @@
 #include<stdio.h>
 #define INFINITY __INT_MAX__
 
+int foo(int a)
+{
+    
+}
+
 int main()
 {
     int a = -INFINITY;

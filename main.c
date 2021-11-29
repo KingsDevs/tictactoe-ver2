@@ -7,7 +7,7 @@
 #define PLAYER2 'O'
 
 #define INFINITY __INT_MAX__
-#define MAX_DEPTH 8
+#define MAX_DEPTH 100
 
 
 char ** create_board(size_t size)
@@ -167,6 +167,12 @@ void switch_player(char * players)
     players[1] = temp;
 }
 
+void set_players(char * players)
+{
+    players[0] = PLAYER1;
+    players[1] = PLAYER2;
+}
+
 void play_with_friend(char ** board, size_t size, char * players)
 {
     while (1)
@@ -228,10 +234,33 @@ int min(int a, int b)
     return b;
 }
 
+int count_empty_spaces(char ** board, size_t size)
+{
+    int count = 0;
+    for (size_t i = 0; i < size; i++)
+    {
+        for (size_t j = 0; j < size; j++)
+        {
+            if(board[i][j] == ' ')
+                count++;
+        }
+        
+    }
+    return count;
+}
+
 int minimax(char ** board, size_t size, bool maximizer, int depth, int alpha, int beta, char computer, char human)
 {
-    int result = check_winner(board, size, computer, human);
-    if(depth <= 0)
+    
+    int result = check_winner(board, size, computer, human) * count_empty_spaces(board , size);
+
+    if(check_won(board, computer, size))
+        return result;
+
+    if(check_won(board, human, size))
+        return result;
+
+    if(depth <= 0 || is_board_full(board, size))
         return result;
 
     if (maximizer)
@@ -267,7 +296,7 @@ int minimax(char ** board, size_t size, bool maximizer, int depth, int alpha, in
             {
                 if (board[i][j] == ' ')
                 {
-                    board[i][j] = computer;
+                    board[i][j] = human;
                     int eval = minimax(board, size, true, depth - 1, alpha, beta, computer, human);
                     board[i][j] = ' ';
                     min_eval = min(min_eval, eval);
@@ -337,7 +366,7 @@ void play_with_computer(char ** board, size_t size, char * players, int * ai_mov
                         board[i][j] = current_player;
                         int score = minimax(board, size, false, MAX_DEPTH, -INFINITY, INFINITY, current_player, human);
                         board[i][j] = ' ';
-
+                        //printf("%d\n", score);
                         if (best_score < score)
                         {
                             best_score = score;
@@ -395,11 +424,13 @@ int main()
             print_board(board, size);
             play_with_friend(board, size, players);
             empty_board(board, size);
+            set_players(players);
             break;
         
         case 2:
             play_with_computer(board, size, players, ai_move);
             empty_board(board, size);
+            set_players(players);
             break;
     
         case 3:
